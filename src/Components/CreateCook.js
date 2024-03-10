@@ -81,16 +81,7 @@ function CreateCook() {
     setSelectedCook(cook);
   };
 
-  const handleDeleteClick = (cookId) => {
-    axios
-      .delete(`http://localhost:3001/api/cooks/${cookId}`)
-      .then(() => {
-        const updatedCooks = cooks.filter((cook) => cook._id !== cookId);
-        setCooks(updatedCooks);
-      })
-      .catch((error) => console.error(error));
-  };
-
+ 
   return (
     <div className="container mt-4">
       <div className="card">

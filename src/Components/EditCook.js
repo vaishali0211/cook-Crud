@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 function EditCook() {
-  const [cook] = useState([]);
+  // const [cook] = useState([]);
 
   const { id } = useParams();
 
@@ -30,6 +30,7 @@ function EditCook() {
         : prevData.cuisines.filter((item) => item !== cuisines),
     }));
   };
+  
 
   let history = useNavigate();
 
@@ -76,7 +77,6 @@ function EditCook() {
 					input textfiled */}
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Control
-                // value={name}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -119,7 +119,7 @@ function EditCook() {
                         label={cuisine}
                         name="cuisines"
                         value={cuisine}
-                        checked={formData.cuisines.includes(cuisine)}
+                        checked={formData && formData.cuisines && formData.cuisines.includes(cuisine)}
                         onChange={handleCheckboxChange}
                       />
                     </div>

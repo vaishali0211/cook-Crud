@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Button, Table, Pagination } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Home() {
   const [cooks, setCooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(5);
+  const navigate = useNavigate();
+
   useEffect(() => {
     // Fetch cooks data from the API
     axios
@@ -21,22 +24,19 @@ function Home() {
     axios
       .delete(`http://localhost:3001/api/cooks/${cookId}`)
       .then((response) => {
-        console.log(response.data);
+        console.log("Cook deleted successfully:", response.data);
 
-        setCooks(response.data);
+        const updatedCooks = response.data;
+
+        setCooks(updatedCooks);
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error deleting cook:", error);
       });
   };
 
-  console.log("Hi", cooks);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
-  const currentCooks = cooks.slice(indexOfFirstItem, indexOfLastItem);
+ 
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
@@ -51,7 +51,7 @@ function Home() {
           <tr>
             <th>Name</th>
             <th>Mobile</th>
-            <th>Cuisines</th>
+            {/* <th>Cuisines</th> */}
             <th>City</th>
 
             <th>Actions</th>
@@ -62,36 +62,37 @@ function Home() {
             <tr key={cook._id}>
               <td>{cook.name}</td>
               <td>{cook.mobile}</td>
-              <td>{cook.cuisines}</td>
+              {/* <td>{cook.cuisines}</td> */}
+
               <td>{cook.city}</td>
 
               <td>
-              <div className="d-flex gap-2">
-                <Link className="gap-2" to={`/editcook/${cook.id}`}>
-                  <Button
-                    onClick={() =>
-                      setCooks(
-                        cook._id,
-                        cook.Name,
-                        cook.Mobile,
-                        cook.Cuisines,
-                        cook.City,
-                        cook.Discription
-                      )
-                    }
-                    variant="warning"
-                  >
-                    Update
-                  </Button>
-                </Link>
+                <div className="d-flex gap-2">
+                  <Link className="gap-2" to={`/editcook/${cook._id}`}>
+                    <Button
+                      onClick={() =>
+                        setCooks(
+                          cook._id,
+                          cook.Name,
+                          cook.Mobile,
+                          cook.Cuisines,
+                          cook.City,
+                          cook.Discription
+                        )
+                      }
+                      variant="warning"
+                    >
+                      Update
+                    </Button>
+                  </Link>
 
-                <Button
-                  className="gap-2"
-                  onClick={() => deleteCook(cook.id)}
-                  variant="danger"
-                >
-                  Delete
-                </Button>
+                  <Button
+                    className="gap-2"
+                    onClick={() => deleteCook(cook._id)}
+                    variant="danger"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </td>
             </tr>
